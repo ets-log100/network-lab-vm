@@ -56,8 +56,20 @@ if ($Major -lt 7 -or ($Major -eq 7 -and $Minor -lt 2)) {
     Fail "VirtualBox 7.2 ou plus récent est requis. Version détectée : $VersionText"
 }
 
-& $VBoxManagePath showvminfo $VmName *> $null
-if ($LASTEXITCODE -eq 0) {
+$vmExists = $false
+try {
+    # Temporarily ignore non-zero exit codes/native errors for this command
+    $ErrorActionPreference = "SilentlyContinue"
+    $null = & $VBoxManagePath showvminfo $VmName 2>&1
+    if ($LASTEXITCODE -eq 0) {
+        $vmExists = $true
+    }
+} finally {
+    # Restore your preferred error action
+    $ErrorActionPreference = "Stop"
+}
+
+if ($vmExists) {
     Fail "une VM nommée '$VmName' existe déjà. Supprimez-la ou renommez-la avant de continuer."
 }
 
@@ -104,8 +116,19 @@ try {
 }
 
 Write-Host "INFO : importation dans VirtualBox"
-& $VBoxManagePath import $Ova --vsys 0 --vmname $VmName
-if ($LASTEXITCODE -ne 0) { Fail "l'importation de la VM a échoué." }
+try {
+    # Temporarily ignore native command errors so the progress bar doesn't crash the script
+    $OldErrorAction = $ErrorActionPreference
+    $ErrorActionPreference = "SilentlyContinue"
+    
+    $null = & $VBoxManagePath import $Ova --vsys 0 --vmname $VmName 2>&1
+} finally {
+    $ErrorActionPreference = $OldErrorAction
+}
+
+if ($LASTEXITCODE -ne 0) { 
+    Fail "l'importation de la VM a échoué." 
+}
 
 & $VBoxManagePath modifyvm $VmName --nat-pf1 delete ssh *> $null
 & $VBoxManagePath modifyvm $VmName --nat-pf1 "ssh,tcp,127.0.0.1,$SshPort,,22"
@@ -113,7 +136,13 @@ if ($LASTEXITCODE -ne 0) { Fail "la configuration de la redirection SSH a échou
 
 $SshKeygen = Get-Command ssh-keygen.exe -ErrorAction SilentlyContinue
 if ($SshKeygen) {
-    & $SshKeygen.Source -R "[localhost]:$SshPort" *> $null
+    try {
+        $OldErrorAction = $ErrorActionPreference
+        $ErrorActionPreference = "SilentlyContinue"
+        $null = & $SshKeygen.Source -R "[localhost]:$SshPort" 2>&1
+    } finally {
+        $ErrorActionPreference = $OldErrorAction
+    }
 }
 
 Write-Host "INFO : démarrage de la VM"
