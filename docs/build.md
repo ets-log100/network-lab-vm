@@ -126,7 +126,7 @@ Le provisionnement installe les paquets additionnels avec `--no-install-recommen
 
 `tshark` est installé sans autoriser la capture non privilégiée via `dumpcap`. Les étudiants peuvent l'utiliser pour analyser des captures en ligne de commande; les captures nécessitant des privilèges peuvent continuer à être réalisées avec les mécanismes prévus par les laboratoires. L'interface graphique Wireshark n'est pas installée.
 
-Ubuntu 24.04 utilise l'activation d'OpenSSH par socket par défaut. L'appliance désactive explicitement `ssh.socket` et le générateur `sshd-socket-generator`, puis active `ssh.service` en mode classique. Ce choix rend le service SSH disponible de façon prévisible dès le démarrage. Le service de premier démarrage est ordonné avant `ssh.service` afin de régénérer les clés hôte avant la première connexion étudiante.
+Ubuntu 26.04 utilise l'activation d'OpenSSH par socket par défaut. L'appliance désactive explicitement `ssh.socket` et le générateur `sshd-socket-generator`, puis active `ssh.service` en mode classique. Ce choix rend le service SSH disponible de façon prévisible dès le démarrage. Le service de premier démarrage est ordonné avant `ssh.service` afin de régénérer les clés hôte avant la première connexion étudiante.
 
 Aucune image de laboratoire n'est préchargée.
 

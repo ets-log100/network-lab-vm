@@ -5,9 +5,20 @@ export DEBIAN_FRONTEND=noninteractive
 
 apt-get update
 
-# Éviter toute question interactive de wireshark-common pendant l'installation
-# de tshark. Les captures privilégiées restent désactivées par défaut.
-printf '%s\n' 'wireshark-common wireshark-common/install-setuid boolean false' | debconf-set-selections
+for attempt in $(seq 1 60); do
+    if printf '%s\n' \
+        'wireshark-common wireshark-common/install-setuid boolean false' \
+        | debconf-set-selections; then
+        break
+    fi
+
+    if [ "$attempt" -eq 60 ]; then
+        echo "ERREUR : debconf est resté verrouillé trop longtemps." >&2
+        exit 1
+    fi
+
+    sleep 5
+done
 
 apt-get install -y --no-install-recommends \
   aardvark-dns \

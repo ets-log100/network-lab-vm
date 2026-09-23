@@ -23,7 +23,7 @@ Avant d'annoncer ARM64 comme supportée, les conditions suivantes doivent être 
 
 L'appliance contient notamment :
 
-- Ubuntu Server 24.04 LTS;
+- Ubuntu Server 26.04 LTS;
 - Podman en mode rootless;
 - `netavark`, `aardvark-dns`, `passt`, `slirp4netns`, `fuse-overlayfs`, `uidmap`, `iptables` et `nftables` pour la pile réseau Podman/rootless;
 - Git et OpenSSH;
