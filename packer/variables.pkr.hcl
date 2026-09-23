@@ -9,6 +9,14 @@ packer {
   }
 }
 
+variable "storage_interface" {
+  type = string
+  validation {
+    condition     = contains(["sata", "virtio"], var.storage_interface)
+    error_message = "L'interface de stockage doit être sata ou virtio."
+  }
+}
+
 variable "arch" {
   type = string
   validation {
