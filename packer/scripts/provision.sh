@@ -103,7 +103,13 @@ kernel.apparmor_restrict_unprivileged_userns=0
 EOF
 sysctl --system >/dev/null
 
-install -d -o log100 -g log100 -m 0755 /home/log100/.config/containers
+install -d -o log100 -g log100 -m 0755 \
+  /home/log100/.config \
+  /home/log100/.config/containers
+
+test "$(stat -c '%U:%G' /home/log100/.config)" = "log100:log100"
+test "$(stat -c '%U:%G' /home/log100/.config/containers)" = "log100:log100"
+
 cat > /home/log100/README.txt <<'EOF'
 LOG100 - Machine virtuelle pour les laboratoires de réseautique
 
