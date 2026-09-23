@@ -4,29 +4,47 @@ source "virtualbox-iso" "ubuntu" {
   output_filename  = "log100-network-lab-vm-${var.arch}"
   output_directory = "output-${var.arch}"
 
+  firmware = "efi"
+
   chipset                  = var.chipset
-  iso_interface            = "sata"
-  hard_drive_interface     = "sata"
+  iso_interface            = var.storage_interface
+  hard_drive_interface     = var.storage_interface
   hard_drive_discard       = true
   hard_drive_nonrotational = true
-  sata_port_count           = 2
+  sata_port_count          = var.storage_interface == "sata" ? 2 : 1
   nic_type                 = var.nic_type
   gfx_controller           = "vmsvga"
   guest_additions_mode     = "disable"
 
-  cpus      = 2
-  memory    = 4096
-  disk_size = 24576
-  headless  = false
-  sound     = "none"
-  usb       = false
+  cpus           = 2
+  memory         = 4096
+  disk_size      = 24576
+  headless       = false
+  sound          = "none"
+  usb            = var.arch == "arm64"
+  usb_controller = var.arch == "arm64" ? "xhci" : "none"
+  keyboard       = var.arch == "arm64" ? "usb" : "ps2"
 
   iso_url      = var.iso_url
   iso_checksum = var.iso_checksum
 
-  vboxmanage = [
-    ["modifyvm", "{{.Name}}", "--boot1", "dvd", "--boot2", "disk", "--boot3", "none", "--boot4", "none"],
-    ["modifyvm", "{{.Name}}", "--firmware", "efi"]
+  vboxmanage = var.arch == "arm64" ? [
+    [
+      "storagectl",
+      "{{.Name}}",
+      "--name",
+      "IDE",
+      "--remove"
+    ]
+    ] : [
+    [
+      "modifyvm",
+      "{{.Name}}",
+      "--boot1", "dvd",
+      "--boot2", "disk",
+      "--boot3", "none",
+      "--boot4", "none"
+    ]
   ]
 
   http_directory        = "${path.root}/http"
