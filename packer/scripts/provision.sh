@@ -3,7 +3,7 @@ set -euo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
-apt-get update
+apt-get -o DPkg::Lock::Timeout=600 update
 
 for attempt in $(seq 1 60); do
     if printf '%s\n' \
@@ -20,7 +20,7 @@ for attempt in $(seq 1 60); do
     sleep 5
 done
 
-apt-get install -y --no-install-recommends \
+apt-get -o DPkg::Lock::Timeout=600 install -y --no-install-recommends \
   aardvark-dns \
   ca-certificates \
   catatonit \

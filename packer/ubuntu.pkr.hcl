@@ -54,10 +54,13 @@ source "virtualbox-iso" "ubuntu" {
   boot_wait              = "20s"
   boot_keygroup_interval = "200ms"
   boot_command = [
-    "c<wait2>",
-    "set gfxpayload=keep<enter><wait2>",
-    "linux /casper/vmlinuz autoinstall ds=\"nocloud-net;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/\" ---<enter><wait2>",
-    "initrd /casper/initrd<enter><wait2>",
+    "c<wait5>",
+    "set gfxpayload=keep<enter><wait5>",
+    "linux /casper/vmlinuz <wait5>",
+    "autoinstall <wait2>",
+    "ds=\"nocloud-net;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/\" <wait5>",
+    "---<enter><wait5>",
+    "initrd /casper/initrd<enter><wait5>",
     "boot<enter>"
   ]
 

@@ -96,7 +96,7 @@ chmod +x setup-vm.sh
 Pour installer une release précise, y compris une préversion :
 
 ```bash
-./setup-vm.sh --version v0.1.1
+./setup-vm.sh --version v0.1.3
 ```
 
 ### Windows Intel ou AMD
@@ -110,7 +110,7 @@ PowerShell -ExecutionPolicy Bypass -File .\setup-vm.ps1
 Pour installer une release précise, y compris une préversion :
 
 ```powershell
-PowerShell -ExecutionPolicy Bypass -File .\setup-vm.ps1 -Version v0.1.1
+PowerShell -ExecutionPolicy Bypass -File .\setup-vm.ps1 -Version v0.1.3
 ```
 
 Sans version explicite, les scripts téléchargent l'asset correspondant depuis la dernière release stable. Avec une version explicite, ils téléchargent directement les assets du tag demandé. Dans les deux cas, ils détectent l'architecture du système hôte, vérifient le SHA-256, importent la VM, configurent la redirection SSH et démarrent la VM.
@@ -156,7 +156,7 @@ Ce mode publie uniquement les assets AMD64, marque la GitHub Release comme prév
 Un autre fichier de notes peut être sélectionné explicitement :
 
 ```bash
-./scripts/release.sh --prerelease --notes release-notes/v0.1.1.md
+./scripts/release.sh --prerelease --notes release-notes/v0.1.3.md
 ```
 
 La publication stable exige les assets AMD64 et ARM64 ainsi qu'une validation explicite d'ARM64 :
