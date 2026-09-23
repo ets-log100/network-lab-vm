@@ -56,6 +56,25 @@ if [[ "$mode" != "--final" ]]; then
     touch /etc/cloud/cloud-init.disabled
   fi
 
+log "configuration du réseau de l'appliance"
+install -d -m 0755 /etc/netplan
+
+cat > /etc/netplan/01-log100.yaml <<'EOF'
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    primary:
+      match:
+        name: "en*"
+      dhcp4: true
+      dhcp6: false
+      optional: true
+EOF
+
+chmod 0600 /etc/netplan/01-log100.yaml
+netplan generate
+
   if command -v journalctl >/dev/null 2>&1; then
     journalctl --rotate || true
     journalctl --vacuum-time=1s || true

@@ -89,7 +89,7 @@ KbdInteractiveAuthentication no
 AllowUsers log100 packer
 EOF
 
-# Ubuntu 24.04 active OpenSSH par socket par défaut. Pour cette appliance,
+# Ubuntu 26.04 active OpenSSH par socket par défaut. Pour cette appliance,
 # utiliser le service classique afin que SSH soit disponible dès le démarrage.
 systemctl disable ssh.socket || true
 install -d -m 0755 /etc/systemd/system-generators
